@@ -35,6 +35,11 @@ function App() {
     setAlert({ show, msg, type });
   };
 
+  const clearList = () => {
+    showAlert(true, "all items deleted!", "danger");
+    setList([]);
+  };
+
   useEffect(() => {
     inputRef.current.focus();
   });
@@ -61,7 +66,9 @@ function App() {
       {list.length > 0 && (
         <div className="grocery-container">
           <List items={list} />
-          <button className="clear-btn">clear items</button>
+          <button className="clear-btn" onClick={clearList}>
+            clear items
+          </button>
         </div>
       )}
     </section>
