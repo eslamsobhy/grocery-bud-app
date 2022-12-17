@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import List from "./List";
 import Alert from "./Alert";
 
@@ -12,6 +12,9 @@ function App() {
     type: "",
   });
 
+  // ref for the focus
+  const inputRef = useRef(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // console.log("all is clear");
@@ -21,6 +24,7 @@ function App() {
     } else if (name && isEditing) {
       // deal with editing
     } else {
+      showAlert(true, "item added to the list", "success");
       const newItem = { id: new Date().getTime().toString(), title: name };
       setList([...list, newItem]);
       setName("");
@@ -30,6 +34,10 @@ function App() {
   const showAlert = (show = false, msg = "", type = "") => {
     setAlert({ show, msg, type });
   };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  });
 
   return (
     <section className="section-center">
@@ -43,6 +51,7 @@ function App() {
             placeholder="e.g. eggs"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            ref={inputRef}
           />
           <button className="submit-btn" type="submit">
             {isEditing ? "edit" : "submit"}
