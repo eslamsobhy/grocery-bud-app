@@ -16,7 +16,8 @@ function App() {
     e.preventDefault();
     // console.log("all is clear");
     if (!name) {
-      setAlert({ show: true, msg: "please enter value!", type: "danger" });
+      // setAlert({ show: true, msg: "please enter value!", type: "danger" });
+      showAlert(true, "please enter value!", "danger");
     } else if (name && isEditing) {
       // deal with editing
     } else {
@@ -24,6 +25,10 @@ function App() {
       setList([...list, newItem]);
       setName("");
     }
+  };
+
+  const showAlert = (show = false, msg = "", type = "") => {
+    setAlert({ show, msg, type });
   };
 
   return (
