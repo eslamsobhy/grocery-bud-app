@@ -2,9 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import List from "./List";
 import Alert from "./Alert";
 
+// local storage function put here to avoid using it before it was defined!
+const getLocalStorage = () => {
+  const list = localStorage.getItem("list");
+  if (list) {
+    return JSON.parse(list);
+  } else {
+    return [];
+  }
+};
+
 function App() {
   const [name, setName] = useState("");
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(getLocalStorage());
   const [isEditing, setIsEditing] = useState(false);
   const [editID, setEditID] = useState(null);
   const [alert, setAlert] = useState({
@@ -68,7 +78,8 @@ function App() {
 
   useEffect(() => {
     inputRef.current.focus();
-  });
+    localStorage.setItem("list", JSON.stringify(list));
+  }, [list]);
 
   return (
     <section className="section-center">
