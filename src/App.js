@@ -5,7 +5,8 @@ import Alert from "./Alert";
 function App() {
   const [name, setName] = useState("");
   const [list, setList] = useState([]);
-  const [isEditing, setisEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editID, setEditID] = useState(null);
   const [alert, setAlert] = useState({
     show: false,
     msg: "",
@@ -22,7 +23,19 @@ function App() {
       // setAlert({ show: true, msg: "please enter value!", type: "danger" });
       showAlert(true, "please enter value!", "danger");
     } else if (name && isEditing) {
-      // deal with editing
+      // updating the list
+      const newList = list.map((item) => {
+        if (item.id === editID) {
+          return { ...item, title: name };
+        }
+        return item;
+      });
+      setList(newList);
+      // everything is back to the default
+      setName("");
+      setEditID(null);
+      setIsEditing(false);
+      showAlert(true, "item updated", "success");
     } else {
       showAlert(true, "item added to the list", "success");
       const newItem = { id: new Date().getTime().toString(), title: name };
@@ -43,6 +56,14 @@ function App() {
   const removeItem = (id) => {
     showAlert(true, "item deleted!", "danger");
     setList(list.filter((item) => item.id !== id));
+  };
+
+  const editItem = (id) => {
+    const specificItem = list.find((item) => item.id === id);
+    setIsEditing(true);
+    setName(specificItem.title);
+    setEditID(id);
+    inputRef.current.select();
   };
 
   useEffect(() => {
@@ -70,7 +91,7 @@ function App() {
       </form>
       {list.length > 0 && (
         <div className="grocery-container">
-          <List items={list} removeItem={removeItem} />
+          <List items={list} removeItem={removeItem} editItem={editItem} />
           <button className="clear-btn" onClick={clearList}>
             clear items
           </button>
